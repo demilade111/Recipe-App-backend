@@ -4,10 +4,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  BeforeUpdate,
-  BeforeInsert,
 } from "typeorm";
-import bcrypt from "bcrypt";
 
 @Entity()
 export class Users {
@@ -23,25 +20,21 @@ export class Users {
   @Column({ type: "text" }) // Use "text" type for password
   password: string;
 
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashpasssword(): Promise<void> {
-    if (this.password) {
-      // The '10' is the number of rounds for salt generation
-      const salt = await bcrypt.genSalt(10);
-      this.password = await bcrypt.hash(this.password, salt);
-    }
-  }
-  checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
-    return bcrypt.compareSync(unencryptedPassword, this.password);
-  }
   @Column({ default: false })
   isEmailVerified: boolean;
 
-  @Column({ nullable: true })
-  emailValidationToken: string;
-  @Column({ nullable: true })
-  emailVerificationTokenExpires: Date;
+  @Column({ type: "varchar", nullable: true })
+  emailValidationToken: string | null;
+
+  @Column({ type: "timestamp", nullable: true })
+  emailVerificationTokenExpires: Date | null;
+
+  @Column({ type: "varchar", nullable: true })
+  passwordResetToken: string | null;
+
+  @Column({ type: "timestamp", nullable: true })
+  passwordResetTokenExpires: Date | null;
+
   @CreateDateColumn()
   createdAt: Date;
 
