@@ -21,7 +21,7 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 
   jwt.verify(
     token,
-    "hhhsahueueue747ehejewennhwheeegwwewdwkwnbhdwhuy",
+    "1234567890",
     (err, decoded) => {
       if (err) {
         throw new CustomError(400, "Invalid token");
