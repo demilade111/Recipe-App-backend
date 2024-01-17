@@ -1,9 +1,8 @@
-// types.d.ts
-
-import { Request } from "express";
-
-declare module "express-serve-static-core" {
-  interface Request {
-    user?: { [key: string]: any }; // Adjust the type as needed for your user object
+import * as express from "express";
+declare global {
+  namespace Express {
+    interface Request {
+      user?: Record<string, any>;
+    }
   }
 }
