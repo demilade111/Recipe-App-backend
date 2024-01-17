@@ -16,8 +16,7 @@ export async function sendEmail(
         pass: "AenaXzZ6AjPGHpRFsG",
       },
     });
-    const verificationUrl = verificationUrls;
-
+   
 
     // Define the email message
     const mailOptions = {
