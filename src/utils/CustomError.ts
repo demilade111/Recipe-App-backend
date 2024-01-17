@@ -6,4 +6,3 @@ export class CustomError extends Error {
     Object.setPrototypeOf(this, CustomError.prototype);
   }
 }
-
