@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 const app = express();
 import { createDatabaseConnection } from "./config/db";
 import userRouter from "./routes/userRouter";
+import recipeRouter from "./routes/recipeRouter";
 import { errorHandler } from "./middlewear/errorHandler";
 
 require("dotenv").config();
@@ -25,10 +26,11 @@ app.get("/home", (req, res) => {
   res.send("okay");
 });
 app.use("/api/users", userRouter);
+app.use("/api/recipes", recipeRouter);
 // After all other middleware and routes
 app.use(errorHandler);
 
-// const port = process.env.PORT || 3001;
+// const port = process.env.PORT;
 // console.log("port: ", port);
 
 app.listen(3001, () => {
