@@ -1,5 +1,7 @@
 import "reflect-metadata";
 import { createConnection, ConnectionOptions } from "typeorm";
+import { Recipe } from "../entity/Recipe";
+import { Users } from "../entity/User";
 
 const dbConfig: ConnectionOptions = {
   type: "postgres",
@@ -10,11 +12,7 @@ const dbConfig: ConnectionOptions = {
   database: "recipedb",
   synchronize: true, // Disable synchronize in production
   logging: process.env.NODE_ENV === "development", // Enable logging in development
-  entities: [
-    process.env.NODE_ENV === "development"
-      ? "src/entity/**/*.ts"
-      : "dist/entity/**/*.js",
-  ],
+  entities: [Users, Recipe],
 
   migrations: [], // Define migrations if needed
   subscribers: [], // Define subscribers if needed
