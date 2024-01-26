@@ -1,34 +1,29 @@
-// authenticateJWT.ts
-
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
+import { JWTPayload } from "../types/jwtPayload";
 
-// Assuming the JWT payload is of this type, adjust as needed
-interface JWTPayload {
-  userId: number;
-  email: string;
-}
-
-interface RequestWithUserRole extends Request {
-  user?: JWTPayload;
-}
-
-const authenticateJWT =
-  () =>
-  async (req: RequestWithUserRole, res: Response, next: NextFunction) => {
-    try {
-      const token = req.headers?.authorization?.split(" ")[1];
-      // console.log(req.headers?.authorization);
-      if (!token) {
-        return res.status(403).json({ message: "Token not  found" });
-      }
-      const decodedData = <JWTPayload>jwt.verify(token, '123456789');
-      req.user = decodedData;
-      // console.log(decodedData);
-      return next();
-    } catch (e) {
-      return res.status(500).json({ e });
+export const authenticateJWT = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ message: "Authentication token required" });
     }
-  };
 
-export default authenticateJWT;
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "Bearer token not found" });
+    }
+
+    const decoded = jwt.verify(token, "1234567890") as JWTPayload; // Replace "1234567890" with your secret key
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(403).json({ message: "Invalid or expired token" });
+  }
+};

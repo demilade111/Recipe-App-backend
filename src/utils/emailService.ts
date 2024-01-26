@@ -12,8 +12,8 @@ export async function sendEmail(
       host: "smtp.ethereal.email",
       port: 587,
       auth: {
-        user: "pearlie39@ethereal.email",
-        pass: "AenaXzZ6AjPGHpRFsG",
+        user: "alexys.walter12@ethereal.email",
+        pass: "y1h321a3KNKbNDZgFh",
       },
     });
    

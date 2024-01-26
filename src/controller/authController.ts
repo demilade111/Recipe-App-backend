@@ -65,8 +65,6 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
       },
     });
   } catch (error) {
-    console.error("Error during user registration:", error);
-
     // Handle custom errors
     if (error instanceof CustomError) {
       return res.status(error.statusCode).json({ message: error.message });
@@ -100,7 +98,6 @@ const verifiedEmail = async (req: Request, res: Response) => {
       res.status(200).json({ message: "Email verified successfully" });
     }
   } catch (error) {
-    console.error("Error verifying email:", error);
     if (error instanceof CustomError) {
       return res.status(error.statusCode).json({ message: error.message });
     }
@@ -118,7 +115,6 @@ const loginUser = async (req: Request, res: Response) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log("isPasswordValid: ", isPasswordValid);
     if (!isPasswordValid) {
       throw new CustomError(400, "Invalid email or password");
     }
@@ -132,7 +128,7 @@ const loginUser = async (req: Request, res: Response) => {
       { email: user.email, userId: user.id },
       "1234567890",
       {
-        expiresIn: "1h",
+        expiresIn: "7d",
       }
     );
 
@@ -143,7 +139,6 @@ const loginUser = async (req: Request, res: Response) => {
       token: token,
     });
   } catch (error) {
-    console.error("Error during login:", error);
     if (error instanceof CustomError) {
       return res.status(error.statusCode).json({ message: error.message });
     }
@@ -222,7 +217,6 @@ const resetPassword = async (req: Request, res: Response) => {
       .status(200)
       .json({ message: "Password has been reset successfully" });
   } catch (error) {
-    console.error("Error during password reset:", error);
     throw new CustomError(500, "Something went wrong");
   }
 };
