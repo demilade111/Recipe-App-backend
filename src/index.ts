@@ -30,9 +30,8 @@ app.use("/api/recipes", recipeRouter);
 // After all other middleware and routes
 app.use(errorHandler);
 
-// const port = process.env.PORT;
-// console.log("port: ", port);
+const port = process.env.PORT;
 
-app.listen(3001, () => {
+app.listen(port, () => {
   console.log(`Server is running`);
 });

@@ -9,7 +9,7 @@ const dbConfig: ConnectionOptions = {
   port: 5432,
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: "recipedb",
+  database: process.env.DB_NAME,
   synchronize: true, // Disable synchronize in production
   logging: process.env.NODE_ENV === "development", // Enable logging in development
   entities: [Users, Recipe],

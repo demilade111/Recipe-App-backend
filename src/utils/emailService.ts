@@ -12,11 +12,10 @@ export async function sendEmail(
       host: "smtp.ethereal.email",
       port: 587,
       auth: {
-        user: "alexys.walter12@ethereal.email",
-        pass: "y1h321a3KNKbNDZgFh",
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
-   
 
     // Define the email message
     const mailOptions = {

@@ -4,6 +4,11 @@ import { getRepository } from "typeorm";
 import { Recipe } from "../entity/Recipe";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 import { CustomError } from "../utils/CustomError";
+import { v2 as cloudinary } from "cloudinary";
+import upload from "../utils/multerConfig";
+
+// Middleware for handling file upload
+export const uploadImage = upload.single("recipeImage");
 
 export async function getAllRecipes(req: AuthenticatedRequest, res: Response) {
   try {
@@ -25,7 +30,6 @@ export async function getAllRecipes(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-
 
 export async function getRecipeById(req: Request, res: Response) {
   try {
@@ -53,12 +57,23 @@ export async function getRecipeById(req: Request, res: Response) {
   }
 }
 
-
 export async function createRecipe(req: AuthenticatedRequest, res: Response) {
   try {
     const recipeRepository = getRepository(Recipe);
+    console.log(req.file);
+
+    let imageUrl = "";
+    if (req.file) {
+      // Using upload method instead of upload_stream
+      const result = await cloudinary.uploader.upload(
+        `data:image/png;base64,${req.file.buffer.toString("base64")}`
+      );
+      imageUrl = result.url; // Now you can access the url property
+    }
+
     const newRecipe = recipeRepository.create({
       ...req.body,
+      photo: imageUrl, // Add the image URL to the recipe
       user: req.user?.userId,
     });
 
@@ -69,7 +84,6 @@ export async function createRecipe(req: AuthenticatedRequest, res: Response) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-
 
 export async function updateRecipe(req: AuthenticatedRequest, res: Response) {
   try {
